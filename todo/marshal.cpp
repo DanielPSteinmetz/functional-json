@@ -6,14 +6,14 @@
 // These are the only two functions exported by this module:
 
 // Constructs JSON Data object corresponding to TodoList.
-json::Data marshall(TodoList const& list) {
+json::Data marshal(TodoList const& list) {
   return { };
 }
 
 
 // Constructs TodoList corresponding to JSON Data.  Throws std::runtime_error if the JSON Data does
 // not correctly describe a to-do list.
-TodoList unmarshall(json::Data const& data) {
+TodoList unmarshal(json::Data const& data) {
   return { };
 }
 

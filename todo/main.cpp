@@ -33,7 +33,7 @@ using namespace std::string_literals;
 TodoList loadData(std::string const& path) {
   std::ifstream in(path);
   if (!in) return {};   // first run: no file yet
-  return unmarshall(json::parse(in));
+  return unmarshal(json::parse(in));
 }
 
 
@@ -41,7 +41,7 @@ TodoList loadData(std::string const& path) {
 void saveData(std::string const& path, TodoList const& list) {
   std::ofstream out(path);
   if (!out) throw std::runtime_error("Cannot write " + path);
-  out << json::format(marshall(list), 4) << '\n';
+  out << json::format(marshal(list), 4) << '\n';
 }
 
 
