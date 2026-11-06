@@ -4,7 +4,9 @@
 add_library(libjson STATIC
   include/json.hpp
   include/parse.hpp
+  include/data.hpp
   parse.cpp
+  data.cpp
 )
 
 target_include_directories(libjson PUBLIC "include")
