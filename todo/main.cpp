@@ -161,75 +161,59 @@ int usage()
 
 int main(int argc, char *argv[])
 {
-  Task t{1, "asdf", true, {"asdf", "another", "different"}, "9999-12-31"};
-  TodoList td{3, {t, t}};
+  std::cout << std::endl;
 
-  auto asJson = marshal(td);
+  std::vector<std::string> args(argv + 1, argv + argc);
+  std::string path = "todo.json";
 
-  std::cout << format(asJson, 2);
-
-  auto unmarshaled = unmarshal(asJson);
-
-  auto remarshaled = marshal(unmarshaled);
-
-  if (asJson == remarshaled) {
-    int x = 0;
+  if (args.size() >= 2 && args[0] == "--file") {
+    path = args[1];
+    args.erase(args.begin(), args.begin() + 2);
   }
-  int i = 0;
-  
-  // std::cout << std::endl;
+  if (args.empty()) return usage();
 
-  // std::vector<std::string> args(argv + 1, argv + argc);
-  // std::string path = "todo.json";
+  std::string const& command = args[0];
+  std::size_t count = args.size() - 1;
 
-  // if (args.size() >= 2 && args[0] == "--file") {
-  //   path = args[1];
-  //   args.erase(args.begin(), args.begin() + 2);
-  // }
-  // if (args.empty()) return usage();
+  TodoList todo;
+  try {
+    todo = loadData(path);
+  }
+  catch (std::exception const& e) {
+    std::cerr << "Cannot read " << path << ": " << e.what() << '\n';
+    return 1;
+  }
 
-  // std::string const& command = args[0];
-  // std::size_t count = args.size() - 1;
+  try {
+    bool modified = true;
 
-  // TodoList todo;
-  // try {
-  //   todo = loadData(path);
-  // }
-  // catch (std::exception const& e) {
-  //   std::cerr << "Cannot read " << path << ": " << e.what() << '\n';
-  //   return 1;
-  // }
+    if (command == "add" && count >= 1) {
+      add(todo, args[1], { args.begin() + 2, args.end() });
+    }
+    else if (command == "list" && count <= 1) {
+      list(todo, count == 1 ? args[1] : "");
+      modified = false;
+    }
+    else if (command == "done" && count == 1) {
+      setDone(todo, parseId(args[1]), true);
+    }
+    else if (command == "undo" && count == 1) {
+      setDone(todo, parseId(args[1]), false);
+    }
+    else if (command == "rename" && count == 2) {
+      rename(todo, parseId(args[1]), args[2]);
+    }
+    else if (command == "remove" && count == 1) {
+      remove(todo, parseId(args[1]));
+    }
+    else {
+      return usage();
+    }
 
-  // try {
-  //   bool modified = true;
-
-  //   if (command == "add" && count >= 1) {
-  //     add(todo, args[1], { args.begin() + 2, args.end() });
-  //   }
-  //   else if (command == "list" && count <= 1) {
-  //     list(todo, count == 1 ? args[1] : "");
-  //     modified = false;
-  //   }
-  //   else if (command == "done" && count == 1) {
-  //     setDone(todo, parseId(args[1]), true);
-  //   }
-  //   else if (command == "undo" && count == 1) {
-  //     setDone(todo, parseId(args[1]), false);
-  //   }
-  //   else if (command == "rename" && count == 2) {
-  //     rename(todo, parseId(args[1]), args[2]);
-  //   }
-  //   else if (command == "remove" && count == 1) {
-  //     remove(todo, parseId(args[1]));
-  //   }
-  //   else {
-  //     return usage();
-  //   }
-
-  //   if (modified) saveData(path, todo);
-  // }
-  // catch (std::exception const& e) {
-  //   std::cerr << e.what() << '\n';
-  //   return 1;
-  // }
+    if (modified) saveData(path, todo);
+  }
+  catch (std::exception const& e) {
+    std::cerr << e.what() << '\n';
+    return 1;
+  }
 }

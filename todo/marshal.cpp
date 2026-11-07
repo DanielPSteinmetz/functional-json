@@ -183,6 +183,7 @@ TodoList unmarshal(json::Data const &data) {
 
   for (int i = 0; json::Data const& taskJson : tasksJson) {
     tasks.push_back(unmarshalTask(taskJson, i));
+    i++;
   }
   list.tasks = std::move(tasks);
 
