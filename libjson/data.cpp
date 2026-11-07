@@ -175,4 +175,18 @@ namespace json
     std::visit(printer, data.variant());
     return sout.str();
   }
+
+  std::string type(Data data) {
+    return std::visit(
+      overload {
+        [](Null) { return "Null"; },
+        [](Boolean) { return "Boolean"; },
+        [](Number) { return "Number"; },
+        [](String) { return "String"; },
+        [](Array) { return "Array"; },
+        [](Object) { return "Object"; }
+      },
+      data.variant()
+    );
+  }
 }

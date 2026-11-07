@@ -161,14 +161,21 @@ int usage()
 
 int main(int argc, char *argv[])
 {
-  Task t{1, "asdf", true, {}, "9999-12-31"};
+  Task t{1, "asdf", true, {"asdf", "another", "different"}, "9999-12-31"};
   TodoList td{3, {t, t}};
 
   auto asJson = marshal(td);
 
   std::cout << format(asJson, 2);
 
-  unmarshal("test");
+  auto unmarshaled = unmarshal(asJson);
+
+  auto remarshaled = marshal(unmarshaled);
+
+  if (asJson == remarshaled) {
+    int x = 0;
+  }
+  int i = 0;
   
   // std::cout << std::endl;
 
