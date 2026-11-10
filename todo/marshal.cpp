@@ -11,9 +11,9 @@ using std::runtime_error;
 //----------------------------------------------------------
 // These are the only two functions exported by this module:
 
-// ---- marshal ----
+// ---- marshall ----
 
-json::Object marshalTask(Task const &task) {
+json::Object marshallTask(Task const &task) {
   json::Object taskJson;
   taskJson["id"] = (json::Number)task.id;
   taskJson["title"] = (json::String)task.title;
@@ -35,20 +35,20 @@ json::Object marshalTask(Task const &task) {
 }
 
 // Constructs JSON Data object corresponding to TodoList.
-json::Data marshal(TodoList const &list) {
+json::Data marshall(TodoList const &list) {
   json::Object listJson;
   listJson["nextId"] = (json::Number)list.nextId;
 
   json::Array tasksJson;
   for (Task const &task : list.tasks) {
-    tasksJson.push_back(marshalTask(task));
+    tasksJson.push_back(marshallTask(task));
   }
   listJson["tasks"] = tasksJson;
 
   return listJson;
 }
 
-// ---- unmarshal ----
+// ---- unmarshall ----
 
 std::string missingFieldMsg(std::string objLabel, std::string field) {
   return objLabel + " missing required `" + field + "` field";
@@ -124,7 +124,7 @@ std::optional<T> expectNullableField(json::Object const &obj,
   return as<T>(fieldJson);
 }
 
-Task unmarshalTask(json::Data const &data, int index) {
+Task unmarshallTask(json::Data const &data, int index) {
   std::string taskLabel = "tasks[" + std::to_string(index) + "]";
 
   Task task;
@@ -163,7 +163,7 @@ Task unmarshalTask(json::Data const &data, int index) {
 
 // Constructs TodoList corresponding to JSON Data.  Throws runtime_error if the
 // JSON Data does not correctly describe a to-do list.
-TodoList unmarshal(json::Data const &data) {
+TodoList unmarshall(json::Data const &data) {
   TodoList list;
 
   // -- todo list --
@@ -182,7 +182,7 @@ TodoList unmarshal(json::Data const &data) {
   std::vector<Task> tasks;
 
   for (int i = 0; json::Data const& taskJson : tasksJson) {
-    tasks.push_back(unmarshalTask(taskJson, i));
+    tasks.push_back(unmarshallTask(taskJson, i));
     i++;
   }
   list.tasks = std::move(tasks);

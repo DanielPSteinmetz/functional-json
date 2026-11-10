@@ -34,7 +34,7 @@ TodoList loadData(std::string const &path)
   std::ifstream in(path);
   if (!in)
     return {}; // first run: no file yet
-  return unmarshal(json::parse(in));
+  return unmarshall(json::parse(in));
 }
 
 // Save TodoList to data file
@@ -43,7 +43,7 @@ void saveData(std::string const &path, TodoList const &list)
   std::ofstream out(path);
   if (!out)
     throw std::runtime_error("Cannot write " + path);
-  out << json::format(marshal(list), 4) << '\n';
+  out << json::format(marshall(list), 4) << '\n';
 }
 
 // Test whether range contains specified value

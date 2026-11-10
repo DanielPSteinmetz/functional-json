@@ -11,7 +11,7 @@
 //       ]
 //   }
 //
-// When unmarshaling, every key shown above is required and must have the type shown; "completed"
+// When unmarshalling, every key shown above is required and must have the type shown; "completed"
 // is either null or a string. Numbers must be integers that fit in an int. Extra keys are ignored.
 // Any violation throws std::runtime_error with a message.
 
@@ -20,9 +20,9 @@
 
 
 // Constructs JSON Data object corresponding to TodoList.
-json::Data marshal(TodoList const& list);
+json::Data marshall(TodoList const& list);
 
 
 // Constructs TodoList corresponding to JSON Data.  Throws std::runtime_error if the JSON Data does
 // not correctly describe a to-do list.
-TodoList unmarshal(json::Data const& data);
+TodoList unmarshall(json::Data const& data);
