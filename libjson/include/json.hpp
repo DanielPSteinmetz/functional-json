@@ -6,5 +6,6 @@
 //   dependencies must come before the files that depend on them
 
 // This one should be last:
+#include <ranges>
 #include "data.hpp"
 #include "parse.hpp"
